@@ -2,15 +2,26 @@
 let SAFETY_DELAY = 1000;
 let safety_timer_handle = null;
 
-let TIMER_REPEAT = {FALSE: false};
-let SWITCH_ID = {LOW: 0, HIGH: 1};
+let TIMER_REPEAT = {
+    FALSE: false
+};
+let SWITCH_ID = {
+    LOW: 0,
+    HIGH: 1
+};
 
 let set_low_off = function() {
-    Shelly.call("switch.set", {id: SWITCH_ID.LOW, on: false});
+    Shelly.call("switch.set", {
+        id: SWITCH_ID.LOW,
+        on: false
+    });
 }
 
 let set_high_off = function() {
-    Shelly.call("switch.set", {id: SWITCH_ID.HIGH, on: false});
+    Shelly.call("switch.set", {
+        id: SWITCH_ID.HIGH,
+        on: false
+    });
 }
 
 /*
@@ -19,20 +30,30 @@ that the other output is turned off before turning the own output on.
 Turning on both outputs at the same time could be fatal for the ventilation system.
 */
 let set_low_on = function() {
-    Shelly.call("switch.getStatus", {id: SWITCH_ID.HIGH}, function(switch_status) {
+    Shelly.call("switch.getStatus", {
+        id: SWITCH_ID.HIGH
+    }, function(switch_status) {
         if (switch_status.output === true) {
             return;
         }
-        Shelly.call("switch.set", {id: SWITCH_ID.LOW, on: true});
+        Shelly.call("switch.set", {
+            id: SWITCH_ID.LOW,
+            on: true
+        });
     });
 }
 
 let set_high_on = function() {
-    Shelly.call("switch.getStatus", {id: SWITCH_ID.LOW}, function(switch_status) {
+    Shelly.call("switch.getStatus", {
+        id: SWITCH_ID.LOW
+    }, function(switch_status) {
         if (switch_status.output === true) {
             return;
         }
-        Shelly.call("switch.set", {id: SWITCH_ID.HIGH, on: true});
+        Shelly.call("switch.set", {
+            id: SWITCH_ID.HIGH,
+            on: true
+        });
     });
 }
 
@@ -68,32 +89,34 @@ let set_ventilation_high = function() {
 }
 
 Shelly.addEventHandler(
-    function (event) {
-        if (!event.info) {return;}
-        if (event.info.event === 'btn_up') { 
-            set_ventilation_off();           
+    function(event) {
+        if (!event.info) {
+            return;
         }
-        else if (event.info.id === SWITCH_ID.LOW && event.info.event === 'btn_down') {            
-            set_ventilation_low();           
-        }
-        else if (event.info.id === SWITCH_ID.HIGH && event.info.event === 'btn_down') {            
-            set_ventilation_high();           
+        if (event.info.event === 'btn_up') {
+            set_ventilation_off();
+        } else if (event.info.id === SWITCH_ID.LOW && event.info.event === 'btn_down') {
+            set_ventilation_low();
+        } else if (event.info.id === SWITCH_ID.HIGH && event.info.event === 'btn_down') {
+            set_ventilation_high();
         }
     }
 )
 
-function fromEntries(entries){
-    var res = {};
-    for(var i = 0; i < entries.length; i++) res[entries[i][0]] = entries[i][1];
+function fromEntries(entries) {
+    let res = {};
+    for (let i = 0; i < entries.length; i++) res[entries[i][0]] = entries[i][1];
     return res;
 }
-if(!Object.fromEntries) Object.fromEntries = fromEntries;
+if (!Object.fromEntries) Object.fromEntries = fromEntries;
 
 HTTPServer.registerEndpoint("set", function(request, response, userdata) {
     let params = Object.fromEntries(
-        request.query.split("&").map(function(kv) {return kv.split("=")})
+        request.query.split("&").map(function(kv) {
+            return kv.split("=")
+        })
     )
-    switch(params["mode"]) {
+    switch (params["mode"]) {
         case "off":
             set_ventilation_off();
             break;
