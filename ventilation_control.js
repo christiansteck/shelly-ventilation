@@ -88,8 +88,7 @@ function fromEntries(entries){
     return res;
 }
 if(!Object.fromEntries) Object.fromEntries = fromEntries;
-// http://<SHELLY_IP>/script/<script_id>/<endpoint_name>
-// HTTPServer.registerEndpoint(endpoint_name, callback[, userdata]) -> string
+
 HTTPServer.registerEndpoint("set", function(request, response, userdata) {
     let params = Object.fromEntries(
         request.query.split("&").map(function(kv) {return kv.split("=")})
