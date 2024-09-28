@@ -11,4 +11,6 @@ E.g. the shelly imposes a limit of 360 seconds.
 
 By using a custom script, it is possible to circumvent these limitations and tailor the behavior exactly to my needs.
 
-The attached script is running on a Shell Plus 2PM with the switches in **detached** mode.
+The attached script is running on a Shell Plus 2PM with both inputs set to mode `Button` and output type `Detached`.
+
+![image](https://github.com/user-attachments/assets/22febe7c-ab72-40fa-9ded-9dabced101d9)
